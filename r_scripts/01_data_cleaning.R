@@ -226,9 +226,68 @@ vehicle_final <- v_transposed %>%
   mutate(count = as.numeric(count))
 
 
+# =============================================================================
+# Section 5: Travel Time to Work by Duration (ACS B08303, 2010)
+# =============================================================================
+# Contains counts of workers per census tract by commute duration bucket
+# (e.g. "Less than 10 minutes", "30 to 34 minutes", etc.), broken down by
+# transportation type. Used in 03_hypothesis_2.R to calculate the percentage
+# of residents with long commutes (>= 30 minutes) per census tract.
+
+commute_raw <- read_csv(
+  here("data", "raw", "transportation_commute_length_B08303.csv")
+)
+
+# transpose
+ct_transposed <- as.data.frame(t(commute_raw[, -1]))
+colnames(ct_transposed) <- commute_raw$`Label (Grouping)`
+ct_transposed <- cbind(census_tract = rownames(ct_transposed), ct_transposed)
+rownames(ct_transposed) <- NULL
+colnames(v_transposed) <- str_trim(colnames(v_transposed))
+
+commute_duration_final <- ct_transposed %>%
+  # convert to long
+  pivot_longer(
+    cols          = -census_tract,
+    names_to      = c("transportation_type", "commute_length"),
+    names_pattern = "(.*?):? ?(.*)",
+    values_to     = "count"
+  ) %>%
+  # create columns for vehicle availability and transportation type
+  mutate(
+    transportation_type = str_extract(commute_length, "(.*?):"),
+    commute_length      = ifelse(
+      str_detect(commute_length, "(.*?):"),
+      "Total",
+      commute_length
+    ),
+    transportation_type = ifelse(
+      str_detect(transportation_type, "Total:"),
+      "All transportation methods",
+      transportation_type
+    )
+  ) %>%
+  fill(transportation_type, .direction = "down") %>%
+  mutate(across(c(transportation_type, commute_length), str_trim)) %>%
+  # shorten transportation_type values
+  mutate(transportation_type = case_when(
+    grepl("Car, truck, or van", transportation_type) ~ "Car",
+    grepl("Public transportation", transportation_type) ~ "Public transportation",
+    grepl("Walked", transportation_type) ~ "Walked",
+    grepl("Taxicab|motorcycle|bicycle|other", transportation_type, ignore.case = TRUE) ~ "Other",
+    grepl("Worked at home", transportation_type) ~ "Worked at home",
+    TRUE ~ transportation_type
+  )) %>%
+  # remove margin of error rows
+  filter(!grepl("Margin of Error", census_tract)) %>%
+  # extract census tract
+  mutate(census_tract = str_extract(census_tract, TRACT_PATTERN)) %>%
+  mutate(census_tract = sapply(census_tract, transform_census_tract)) %>%
+  mutate(transportation_type = gsub(":", "", transportation_type)) %>%
+  mutate(count = as.numeric(gsub(",", "", count)))
 
 # =============================================================================
-# Section 5: Occupation by Median Earnings (ACS B24011, 2010)
+# Section 6: Occupation by Median Earnings (ACS B24011, 2010)
 # =============================================================================
 # Median earnings by occupation type. Only the 5 major occupation categories
 # used in the thesis are retained.
@@ -267,7 +326,7 @@ occupation_salary_final <- salary_transposed %>%
 
 
 # =============================================================================
-# Section 6: PM2.5 Air Pollution (CDC, 2006–2010)
+# Section 7: PM2.5 Air Pollution (CDC, 2006–2010)
 # =============================================================================
 # Daily predicted PM2.5 concentrations at census tract level.
 # The full CDC file is several GB and not stored in this repo.
@@ -312,6 +371,7 @@ datasets <- list(
   sprawl_index                 = spr_index_final,
   demographics                 = d_total,
   mean_travel_time             = mean_travel_time_final,
+  work_commute_time            = commute_duration_final,
   occupation                   = occupation_final,
   occupation_salary            = occupation_salary_final,
   transportation_vehicle_avail = vehicle_final,
