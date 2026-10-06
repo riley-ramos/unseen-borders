@@ -33,6 +33,7 @@ To measure these research questions, I used the following data:
   * B08303 - Travel Time to Work
   * B08141 - Means of Transportation to Work by Vehicles Available
   * B24011 - Occupation by Median Earnings
+  * S2303 - Work Status in the Past 12 Months _(only used in the exploratory sections of `05_hypothesis_4.R`)_
 
 The tables listed under the US Census Bureau are available to view via the Census data explorer. Select: Year = 2010, Geography = Census Tract -> Nevada -> Clark County -> All Census Tracts
 
