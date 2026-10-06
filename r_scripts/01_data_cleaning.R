@@ -360,9 +360,7 @@ pm25_final <- pm_raw %>%
 # =============================================================================
 # Export: Write all cleaned datasets to a single Excel workbook
 # =============================================================================
-# Sheets used directly in thesis analyses are listed first.
-# Supplementary sheets (migration, health, ej_screen, educational_attainment)
-# are included for completeness but do not feed into the published results.
+# Sheets used directly in thesis analyses.
 
 wb <- createWorkbook()
 
@@ -386,3 +384,37 @@ for (sheet_name in names(datasets)) {
 saveWorkbook(wb, file = here("data", "processed", "thesis_data.xlsx"), overwrite = TRUE)
 
 message("thesis_data.xlsx saved to data/processed/")
+
+# Sheets that are NOT used directly in thesis analyses but are referenced in 
+# the exploratory sections of each hypothesis.
+
+other_work_raw <- read_csv(here("data", "raw", "work_status_S2303.csv"))
+
+# transpose
+ow_transposed <- as.data.frame(t(other_work_raw))
+colnames(ow_transposed) <- ow_transposed[1, ]
+ow_transposed <- ow_transposed[-1, ]
+ow_transposed <- cbind(census_tract = rownames(ow_transposed), ow_transposed)
+rownames(ow_transposed) <- NULL
+colnames(ow_transposed) <- make.unique(str_trim(colnames(ow_transposed)))
+
+other_work_final <- ow_transposed %>%
+  # remove margin of error rows
+  filter(!grepl("Margin of Error", census_tract)) %>%
+  # just keep total rows - remove count by gender
+  filter(grepl("Total!!Estimate", census_tract)) %>%
+  # just select mean hours worked column
+  select(census_tract,`Mean usual hours worked for workers`) %>%
+  rename(mean_hours = `Mean usual hours worked for workers`) %>%
+  # extract census tract
+  mutate(census_tract = str_extract(census_tract, TRACT_PATTERN)) %>%
+  mutate(census_tract = sapply(census_tract, transform_census_tract)) %>%
+  mutate(across(-census_tract, as.numeric)) %>%
+  # create full-time vs. not full-time column
+  mutate(avg_status = ifelse(mean_hours >= 40, "full-time", "not full-time"))
+
+# save to exploratory data workbook
+wb <- createWorkbook()
+addWorksheet(wb, "other_work")
+writeData(wb, sheet = "other_work", x = other_work_final)
+saveWorkbook(wb, file = here("data", "processed", "exploratory_data.xlsx"), overwrite = TRUE)
