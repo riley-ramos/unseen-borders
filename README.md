@@ -1,4 +1,8 @@
 # Unseen-Borders
+<p align="center">
+ <img src="https://github.com/user-attachments/assets/73495aba-05cb-4dec-a1a1-762fc60b5df7" width="50%">
+</p>
+
 This respository contains scripts used for data cleaning, data analysis, and visualization creation of my undergraduate Honors Thesis ***Unseen Borders: Sprawl's Role in Fueling Las Vegas Inequality***. 
 
 This README file provides an overview of the research questions, statistical methodologies, and data used to create this research project. It also details how to navigate this repository to view the cleaned data, key findings, and figures of my research.
