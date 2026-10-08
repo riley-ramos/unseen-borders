@@ -27,7 +27,7 @@ To measure these research questions, I used the following data:
 * [<u>**Urban Sprawl Index**</u>](https://gis.cancer.gov/tools/urban-sprawl/) - *Reid Ewing & Shima Hamidi (2010)*.
 * [<u>**Predicted PM<sub>2.5</sub> Concentrations**</u>](https://data.cdc.gov/Environmental-Health-Toxicology/Daily-Census-Tract-Level-PM2-5-Concentrations-2006/ujra-cbx5/about_data) - *Centers for Disease Control and Prevention (2010)*.
 * [<u>**U.S. Census Bureau**</u>](https://data.census.gov/table) - *American Community Survey (2010)*. 
-  * DP05 - Demographic and Housing Estimates (race, population)
+  * DP05 - Demographic and Housing Estimates (race, population, poverty)
   * DP03 - Selected Economic Characteristics (mean commute time, occupation)
   * B08301 - Means of Transportation to Work
   * B08303 - Travel Time to Work
@@ -39,7 +39,7 @@ The tables listed under the US Census Bureau are available to view via the Censu
 
 ## Code Structure
 
-This analysis is organized into two stages: data preparation and analysis. All scripts are located in the `r_scripts/` folder and are designed to be run in order. 
+This analysis is organized into two stages: data preparation and analysis. All scripts are located in the `code/` folder and are designed to be run in order. 
 
 **<u>Data Preparation</u>**
 * `01_data_cleaning.R`: Imports and cleans all raw data sources, standardizes census tract identifiers, reverses sprawl index scale, and exports a single Excel workbook (`data/processed/thesis_data.xlsx`), with one sheet per dataset.
@@ -50,7 +50,7 @@ This analysis is organized into two stages: data preparation and analysis. All s
 * `04_hypothesis_3.R`: T-test and OLS regressions examining the relationship between sprawl and private vehicle usage
 * `05_hypothesis_4.R`: OLS regressions examining the relationship between sprawl and employment composition (specifically management vs. service occupations)
 * `06_hypothesis_5.R`: OLS regressions examining the relationship between sprawl and PM<sub>2.5</sub> air pollution exposure
-* `07_combined_analysis.R`: Combined OLS and LASSO regression models across all sprawl outcomes
+* `07_combined_analysis.ipynb`: Combined OLS and LASSO regression models across all sprawl outcomes; also creates burden score using PCA.
 * `08_summary_stats.R`: Summary statistics for all analysis variables (Table 2 in the thesis)
 * `09_maps.R`: Choropleth maps of sprawl, median income, and percent people of color across the Las Vegas Valley. 
 * `10_burden_maps.R`: Map of the Sprawl Burden Index across the Las Vegas Valley.
