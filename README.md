@@ -1,6 +1,6 @@
 # Unseen-Borders
 <p align="center">
- <img src="https://github.com/user-attachments/assets/73495aba-05cb-4dec-a1a1-762fc60b5df7" width="50%">
+ <img src="https://github.com/user-attachments/assets/3914f6a1-c02e-4bc0-a8b4-79b012f43656" width="50%">
 </p>
 
 This respository contains scripts used for data cleaning, data analysis, and visualization creation of my undergraduate Honors Thesis ***Unseen Borders: Sprawl's Role in Fueling Las Vegas Inequality***. 
