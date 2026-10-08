@@ -7,6 +7,9 @@ This respository contains scripts used for data cleaning, data analysis, and vis
 
 This README file provides an overview of the research questions, statistical methodologies, and data used to create this research project. It also details how to navigate this repository to view the cleaned data, key findings, and figures of my research.
 
+## Thesis
+* [Thesis Overview Presentation](https://github.com/riley-ramos/unseen-borders/blob/main/docs/lv_sprawl_equity_presentation.pdf) - Slide deck presented at the UNLV Undergraduate Research Symposium summarizing the thesis findings, methodology, and policy implications.
+
 ## Research Questions
 This project explores how urban sprawl shapes everyday life in the Las Vegas Valley. It specifically analyzes whether a census tract's level of sprawl affects residents' commute lengths, primary mode of transportation, access to employment opportunities, and exposure to air pollution. It also explores whether these effects are disproportionately experienced by people of color and lower-income residents, a disparity that is quantified by a novel Sprawl Burden Index. Las Vegas makes a compelling case study for this project due to it being one of the most racially diverse and fastest-growing cities in the United States; however, the consequences of its rapid outward expansion remain understudied.
 
